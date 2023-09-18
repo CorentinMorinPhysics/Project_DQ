@@ -1,3 +1,4 @@
+#%%
 import numpy as np
 import matplotlib.pyplot as plt
 import pyvisa as visa
@@ -19,18 +20,20 @@ def go_to_volt_power(beg,target,device):
         device.write('OUTPut ON')   
         for k in range(len(temp_V)):
             device.write('VOLTage '+str(temp_V[k]))
+            time.sleep(0.5)
         print(f'Target {temp_V[k]}V reached')
 
 def go_to_volt_source(beg,target,device):
     if beg==target:
-        device.write('VOLTage '+str(beg))
-        device.write('OUTPut ON') 
+        device.write('SOUR:VOLT '+str(beg))
+        device.write("OUTP ON")
     else:
         temp_V = np.linspace(beg,target,10)
-        device.write('VOLTage '+str(temp_V[0]))
+        device.write('SOUR:VOLT '+str(temp_V[0]))
         device.write('OUTPut ON')   
         for k in range(len(temp_V)):
-            device.write('VOLTage '+str(temp_V[k]))
+            device.write('SOUR:VOLT '+str(temp_V[k]))
+            time.sleep(0.5)
         print(f'Target {temp_V[k]}V reached')
 
 #%% Opening the ressources
@@ -39,7 +42,7 @@ print(rm.list_resources())
 
 
 #%%
-sourcemeter_address = 'GPIB0::22::INSTR'
+sourcemeter_address = 'GPIB1::18::INSTR'
 powersupply_address = 'GPIB1::1::INSTR' #Put here the Visa address of the high voltage generator
 identification_request = '*IDN?'
 
@@ -51,25 +54,25 @@ sourcemeter.timeout = 10*60*1e3
 
 
 #%% Infos
-device_name = 'Commercial_MOSFET' #Enter here your device name
+device_name = 'Dev_WSe2_15_09_B' #Enter here your device name
 Description = 'IV measurements of the Device...'
-save_path = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\' # my path with / at the end
+save_path = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\Dev_WSe2_15_09_B\\' # my path with / at the end
 currentDateAndTime = datetime.now()
 timestamp = str(currentDateAndTime.day) +'_' + str(currentDateAndTime.month)+'_' + str(currentDateAndTime.year)+"-"+str(currentDateAndTime.hour)+'-'+str(currentDateAndTime.minute)+'-'+ str(currentDateAndTime.second)
 file_path= save_path + 'IV' + device_name +'_'+ timestamp +'.mat'
 #%% Measurment parameters
 
 min_VDS = 0
-max_VDS = 5
+max_VDS = 0.5
 #step_VDS = 0.01
-number_of_points_VDS=10
+number_of_points_VDS=51
 wait_time_VDS = 0.5 #in seconds
 min_VGS = 0
-max_VGS = 5
+max_VGS = 15
 #step_VGS = 0.01
-number_of_points_VGS = 5
+number_of_points_VGS = 15
 wait_time_VGS = 0.5
-
+max_I = 100e-9
 #%% preparing everything
 list_high_V = np.linspace(min_VGS,max_VGS,number_of_points_VGS)
 
@@ -89,8 +92,8 @@ sourcemeter.write('*RST')
 sourcemeter.write('SENS:FUNC "CURR"')
 sourcemeter.write('SENS:CURR:RANG:AUTO ON')
 sourcemeter.write('SOUR:FUNC VOLT')
-sourcemeter.write('SOUR:VOLT:RANG 20')
-sourcemeter.write('SOUR:VOLT:ILIM 1')
+sourcemeter.write('SOUR:VOLT:RANG '+str(np.max(wanted_VDS)))
+sourcemeter.write('SOUR:VOLT:ILIM '+str(max_I))
 sourcemeter.write(buffer_creation)
 sourcemeter.write(str_sweep_sourcemeter)
 
@@ -106,8 +109,8 @@ for i in range(len(list_high_V)):
     sourcemeter.write('SENS:FUNC "CURR"')
     sourcemeter.write('SENS:CURR:RANG:AUTO ON')
     sourcemeter.write('SOUR:FUNC VOLT')
-    sourcemeter.write('SOUR:VOLT:RANG 20')
-    sourcemeter.write('SOUR:VOLT:ILIM 1')
+    sourcemeter.write('SOUR:VOLT:RANG '+str(np.max(wanted_VDS)))
+    sourcemeter.write('SOUR:VOLT:ILIM '+str(max_I))
     sourcemeter.write(buffer_creation)
     sourcemeter.write(str_sweep_sourcemeter)
     sourcemeter.write(':INIT')
@@ -130,8 +133,22 @@ go_to_volt_power(list_high_V[-1],0,powersupply)
 sourcemeter.write("OUTP OFF")
 powersupply.write('OUTPut OFF')
 
-sourcemeter.close()
-powersupply.close()
+
+#%%
+plt.figure()
+for i in range(len(VGS[0,:])):
+    plt.plot(wanted_VDS,IDS[:,i], label=f'VGS={VGS[0,i]}')
+plt.xlabel('VDS (in V)')
+plt.ylabel('IDS (in A)')
+plt.legend()
+
+plt.figure()
+for i in range(len(VDS[:,0])):
+    plt.plot(VGS[i,:],IDS[i,:], label=f'VDS={np.mean(wanted_VDS[i])}')
+plt.legend()
+plt.xlabel('VGS (in V)')
+plt.ylabel('IDS (in A)')
+plt.show()
 #%% Recording
 
 
@@ -139,3 +156,7 @@ powersupply.close()
 mdic = {'IDS current' : IDS, "VGS Gate Volt": VGS,"VDS Bias Volt": VDS, "Wanted VDS":wanted_VDS}
 savemat(file_path, mdic) 
 
+#%%
+
+sourcemeter.close()
+powersupply.close()

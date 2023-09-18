@@ -1,10 +1,10 @@
+#%%
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 import scipy.io
-
 #%%
-path_to_folder = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\IVCommercial_MOSFET_14_9_2023-9-52-30.mat'
+path_to_folder = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\Dev_WSe2_15_09_B\\IVDev_WSe2_15_09_B_18_9_2023-15-8-0_whole_3D_map.mat'
 mat = scipy.io.loadmat(path_to_folder)
 print(mat.keys())
 
@@ -29,3 +29,4 @@ plt.legend()
 plt.xlabel('VGS (in V)')
 plt.ylabel('IDS (in A)')
 plt.show()
+# %%
