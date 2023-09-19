@@ -51,14 +51,14 @@ sourcemeter.timeout = 10*60*1e3
 
 
 
-VDS = 0.5
+VDS = 0.8
 min_VGS = 0
-max_VGS = 25
+max_VGS = 50
 number_of_points_VGS = 51
 wait_time_VGS = 0.5
 max_I = 100e-9
 
-number_of_points_avg = 5
+number_of_points_avg = 10
 #%% preparing everything
 list_high_V = np.linspace(min_VGS,max_VGS,number_of_points_VGS)
 my_IDS = 0*list_high_V
@@ -92,10 +92,10 @@ go_to_volt_power(list_high_V[-1],0,powersupply)
 powersupply.write("OUTP OFF")
 # %%
 
-name_file = 'VGS_Sweep_VDS_0d5V'
-polarity_power = 'plus'
+name_file = 'VGS_Sweep_VDS_0d8V'
+polarity_power = 'minus'
 Description = 'IV measurements of the Device...'
-save_path = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\Dev_WSe2_15_09_B\\Good_measurements\\' # my path with / at the end
+save_path = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\Dev_WSe2_15_09_B\\' # my path with / at the end
 currentDateAndTime = datetime.now()
 timestamp = str(currentDateAndTime.day) +'_' + str(currentDateAndTime.month)+'_' + str(currentDateAndTime.year)+"-"+str(currentDateAndTime.hour)+'-'+str(currentDateAndTime.minute)+'-'+ str(currentDateAndTime.second)
 
@@ -120,3 +120,5 @@ elif polarity_power=='plus':
     plt.figure()
     plt.errorbar(list_high_V,my_IDS,my_err_IDS)
     plt.show()
+
+# %%
