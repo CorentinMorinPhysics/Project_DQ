@@ -32,8 +32,8 @@ plt.show()
 
 
 # %%
-path_to_folder = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\Dev_WSe2_15_09_B\\Good_measurements\\Leakage\\'
-path_to_file = 'IVDev_WSe2_12_09_B_leakage_18_9_2023-18-9-31.mat'
+path_to_folder = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\Dev_WSe2_15_09_B\\'
+path_to_file = 'IVDev_WSe2_12_09_B_VDS_sweep_VGS_still_test_symmetry_19_9_2023-12-4-9.mat'
 file = path_to_folder + path_to_file
 mat = scipy.io.loadmat(file)
 IDS = mat['IDS current'][0]

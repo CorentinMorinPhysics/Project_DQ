@@ -61,13 +61,38 @@ mat = scipy.io.loadmat(file_minus)
 IDS_m = mat['IDS current'][0]
 VGS_m = mat['VGS'][0]
 IDS_error_m = mat['IDS_error'][0]
-
-
-plt.figure()
-plt.errorbar(VGS_m,IDS_m,IDS_error_m)
-plt.errorbar(VGS_p,IDS_p,IDS_error_p)
+print(len(IDS_p))
+print(len(IDS_m))
+#%%
+fig, ax = plt.subplots()
+ax2 = ax.twinx()
+ax.errorbar(VGS_m,np.sqrt(IDS_m),IDS_error_m)
+ax.errorbar(VGS_p,np.sqrt(IDS_p),IDS_error_p)
+plt.ylabel('IDS (in A)')
+ax2.errorbar(VGS_m,IDS_m,IDS_error_m)
+ax2.errorbar(VGS_p,IDS_p,IDS_error_p)
 plt.title('VDS = 0.8V')
 plt.xlabel('VGS (in V)')
-plt.ylabel('IDS (in A)')
+plt.ylabel('IDS^0.5 (in A)')
 plt.show()
+# %%
+U = 0.8
+I = 4.5e-10
+print(U/I)
+# %%
+my_R = np.linspace(0,1e6)
+my_I = 2 * my_R/(my_R + 10e3)
+plt.plot(my_R,my_I)
+# %%
+plt.figure()
+plt.plot(VGS_m,np.log10((((0.8-(1.9e9*IDS_m))/(IDS_m)))))
+plt.plot(VGS_p,np.log10(((0.8-(1.9e9*IDS_p))/IDS_p)))
+plt.show()
+
+plt.figure()
+plt.plot(VGS_m,(0.8-(1.9e9*IDS_m)))
+plt.show()
+# %%
+print(np.max(0.8/IDS_p))
+
 # %%
