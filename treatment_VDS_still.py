@@ -47,9 +47,9 @@ plt.show()
 
 
 # %%
-path_to_folder = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\Dev_WSe2_15_09_B\\'
-path_file_plus = 'IVDev_WSe2_15_09_B_plus_VGS_Sweep_VDS_0d8V_19_9_2023-11-34-26.mat'
-path_file_minus = 'IVDev_WSe2_15_09_B_minus_VGS_Sweep_VDS_0d8V_19_9_2023-11-39-13.mat'
+path_to_folder = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\Dev_WSe2_15_09_B\\21_09\\'
+path_file_plus = 'IVDev_WSe2_15_09_B_plus_VGS_Sweep_VDS_4V_21_9_2023-15-47-7.mat'
+path_file_minus = 'IVDev_WSe2_15_09_B_minus_VGS_Sweep_VDS_4V_21_9_2023-15-43-16.mat'
 
 file_plus = path_to_folder + path_file_plus 
 mat = scipy.io.loadmat(file_plus)

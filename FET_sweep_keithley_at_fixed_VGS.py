@@ -30,7 +30,7 @@ print(rm.list_resources())
 
 #%%
 sourcemeter_address = 'GPIB1::18::INSTR'
-powersupply_address = 'GPIB1::1::INSTR' #Put here the Visa address of the high voltage generator
+powersupply_address = 'USB0::0x2A8D::0x1902::MY61001731::INSTR' #Put here the Visa address of the high voltage generator
 identification_request = '*IDN?'
 sourcemeter = rm.open_resource(sourcemeter_address)
 print(f'{sourcemeter_address} : {sourcemeter.query(identification_request)}')
@@ -41,11 +41,11 @@ sourcemeter.timeout = 10*60*1e3
 
 #%%
 
-min_VDS = -1
-max_VDS = 1
+min_VDS = 0
+max_VDS = 5
 #step_VDS = 0.01
-number_of_points_VDS=101
-wait_time_VDS = 0.5 #in seconds
+number_of_points_VDS=51
+wait_time_VDS = 5 #in seconds
 VGS = -20
 max_I = 10e-6
 
@@ -93,7 +93,7 @@ plt.ylabel('IDS (in A)')
 plt.legend()
 plt.show()
 #%%
-device_name = 'Dev_WSe2_12_09_B_VDS_sweep_VGS_still_test_symmetry' #Enter here your device name
+device_name = 'Dev_WSe2_12_09_B_VDS_sweep_VGS_still_m20_fast_0d1s_between_points' #Enter here your device name
 Description = 'IV measurements of the Device...'
 save_path = 'E:\\PC Config\\Documents\\Fac\\Cours\\Semestre 9 M2\\Projets\\Data\\\\Dev_WSe2_15_09_B\\' # my path with / at the end
 currentDateAndTime = datetime.now()
